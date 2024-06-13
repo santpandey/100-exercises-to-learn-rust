@@ -1,3 +1,5 @@
+use std::mem;
+
 struct Ticket {
     title: String,
     description: String,
@@ -17,7 +19,29 @@ impl Ticket {
     // as well as some `String` methods. Use the documentation of Rust's standard library
     // to find the most appropriate options -> https://doc.rust-lang.org/std/string/struct.String.html
     fn new(title: String, description: String, status: String) -> Self {
-        todo!();
+        //todo!();
+        match status.as_str() {
+            "To-Do" | "In Progress" | "Done" => println!(""),
+            _ => panic!("Only `To-Do`, `In Progress`, and `Done` statuses are allowed"),
+        }
+
+        if title.capacity() == 0  {
+            panic!("Title cannot be empty")
+        }
+        if description.capacity() == 0 {
+            panic!("Description cannot be empty")
+        }
+        
+        let title_size = title.as_bytes().len();
+        if title_size > 50 {
+            panic!("Title cannot be longer than 50 bytes")
+        }
+
+        let description_size = description.as_bytes().len();
+        if description_size > 50 {
+            panic!("Description cannot be longer than 500 bytes")
+        }
+
         Self {
             title,
             description,

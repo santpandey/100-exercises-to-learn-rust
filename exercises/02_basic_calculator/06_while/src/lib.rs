@@ -10,7 +10,7 @@ pub fn factorial(n: u32) -> u32 {
         result *= a;
         a -=1;
     }
-     result;
+     result
     //todo!()
 }
 

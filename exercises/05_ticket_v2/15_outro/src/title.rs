@@ -7,25 +7,24 @@
 pub struct TicketTitle(String);
 
 #[derive(Debug, thiserror::Error)]
-#[error("`{invalid_status}` is not a valid status. Use one of: ToDo, InProgress, Done")]
-pub struct ParseStatusError {
-    invalid_status: String,
+pub enum ParseStatusError {
+
+    #[error("The title cannot be empty")]
+    Empty,
+    #[error("The title cannot be longer than 50 bytes")]
+    TooLong,
 }
 
 impl TryFrom<String> for TicketTitle {
     type Error = ParseStatusError;
 
-    fn try_from(value: String) -> Result<Self, ParseStatusError> {
+    fn try_from(value: String) -> Result<Self, Self::Error> {
         if value.is_empty() {
-            Err(ParseStatusError {
-                invalid_status: "The title cannot be empty".to_string()
-            });
+           return Err(ParseStatusError::Empty)
         } else if value.len() > 50 {
-            ParseStatusError {
-                invalid_status: "The title cannot be longer than 50 bytes".to_string()
-            };
+            return Err(ParseStatusError::TooLong)
         }
-        Ok(TicketTitle(value))
+        return Ok(TicketTitle(value.to_string()))
     }
 }
 
@@ -33,17 +32,13 @@ impl TryFrom<String> for TicketTitle {
 impl TryFrom<&str> for TicketTitle {
     type Error = ParseStatusError;
 
-    fn try_from(value: &str) -> Result<Self, ParseStatusError> {
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
         if value.is_empty() {
-            ParseStatusError {
-                invalid_status: "The title cannot be empty".to_string()
-            };
+            return Err(ParseStatusError::Empty)
         } else if value.len() > 50 {
-            ParseStatusError {
-                invalid_status: "The title cannot be longer than 50 bytes".to_string()
-            };
+            return Err(ParseStatusError::TooLong)
         }
-        Ok(TicketTitle(value.to_string()))
+        return Ok(TicketTitle(value.to_string()))
     }
 }
 

@@ -2,7 +2,50 @@
 //   enforcing that the title is not empty and is not longer than 50 characters.
 //   Implement the traits required to make the tests pass too.
 
+
+#[derive(Debug,PartialEq,Clone)]
 pub struct TicketTitle(String);
+
+#[derive(Debug, thiserror::Error)]
+#[error("`{invalid_status}` is not a valid status. Use one of: ToDo, InProgress, Done")]
+pub struct ParseStatusError {
+    invalid_status: String,
+}
+
+impl TryFrom<String> for TicketTitle {
+    type Error = ParseStatusError;
+
+    fn try_from(value: String) -> Result<Self, ParseStatusError> {
+        if value.is_empty() {
+            Err(ParseStatusError {
+                invalid_status: "The title cannot be empty".to_string()
+            });
+        } else if value.len() > 50 {
+            ParseStatusError {
+                invalid_status: "The title cannot be longer than 50 bytes".to_string()
+            };
+        }
+        Ok(TicketTitle(value))
+    }
+}
+
+
+impl TryFrom<&str> for TicketTitle {
+    type Error = ParseStatusError;
+
+    fn try_from(value: &str) -> Result<Self, ParseStatusError> {
+        if value.is_empty() {
+            ParseStatusError {
+                invalid_status: "The title cannot be empty".to_string()
+            };
+        } else if value.len() > 50 {
+            ParseStatusError {
+                invalid_status: "The title cannot be longer than 50 bytes".to_string()
+            };
+        }
+        Ok(TicketTitle(value.to_string()))
+    }
+}
 
 #[cfg(test)]
 mod tests {

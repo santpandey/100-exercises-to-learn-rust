@@ -23,14 +23,13 @@ impl WeekTemperatures {
     //let mut DAY_MAP: HashMap<Weekday, Option<i32>> = HashMap::new();
     
     pub fn new() -> Self {
-        Self{day_map: HashMap::with_capacity(8)}
+        Self{day_map: HashMap::new()}
     }
 
     pub fn get_temperature(&self, day: Weekday) -> Option<i32> {
         let m1 = &self.day_map;
         //let temp_value = m1.get(&day);
         m1.get(&day).copied()
-        
     }
 
     pub fn set_temperature(&mut self, day: Weekday, temperature: i32) {
